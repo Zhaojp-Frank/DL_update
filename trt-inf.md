@@ -111,9 +111,9 @@ results of vgg_16:
     latency_mean(ms): 2.88
     latency_median(ms): 2.87
     latency_min(ms): 2.77
+```
 
-
-  ### Output
+  ### log Output
   ``` 
 2019-12-09 08:57:31.047898: I tensorflow/compiler/tf2tensorrt/segment/segment.cc:460] There are 7 ops of 6 different types in the graph that are not converted to TensorRT: Add, ArgMax, Identity, Const, NoOp, Placeholder, (For more information see https://docs.nvidia.com/deeplearning/dgx/tf-trt-user-guide/index.html#supported-ops).
 2019-12-09 08:57:31.076361: I tensorflow/compiler/tf2tensorrt/convert/convert_graph.cc:735] Number of TensorRT candidate segments: 1
