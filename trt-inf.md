@@ -20,6 +20,99 @@ python image_classification.py \
     --batch_size 8 \
 	--num_iterations 50
   ```
+  ### typical result
+  P100/V100 tft 延迟和吞吐基本降低1x (fp16)
+  ```
+  ==========mobilenet_v2 fp32 native,batch=1,no trt
+    step 50/50, iter_time(ms)=4.7359, images/sec=211
+results of mobilenet_v2:
+    images/sec: 210
+    99th_percentile(ms): 4.79
+    total_time(s): 0.1
+    latency_mean(ms): 4.74
+    latency_median(ms): 4.75
+    latency_min(ms): 4.68
+
+==========mobilenet_v2 fp32 native,batch=1, with trt. 70W/250W, 8.8GB
+    step 5000/5000, iter_time(ms)=1.7672, images/sec=565
+results of mobilenet_v2:
+    images/sec: 558
+    99th_percentile(ms): 1.87
+    total_time(s): 8.9
+    latency_mean(ms): 1.79
+    latency_median(ms): 1.78
+    latency_min(ms): 1.75
+
+==========mobilenet_v2 fp32 native,batch=4, with trt. 85W/250W, 8.8GB
+results of mobilenet_v2:
+    images/sec: 858
+    99th_percentile(ms): 2.49
+    total_time(s): 9.3
+    latency_mean(ms): 2.33
+    latency_median(ms): 2.32
+    latency_min(ms): 2.26
+
+==========mobilenet_v2 fp32 native,batch=4, with trt. 105W/250W
+results of mobilenet_v2:
+    images/sec: 1283
+    99th_percentile(ms): 3.23
+    total_time(s): 12.4
+    latency_mean(ms): 3.12
+    latency_median(ms): 3.11
+    latency_min(ms): 3.04
+
+==========mobilenet_v2 fp32 native,batch=8, with trt. 135W/250W, 8.8GB
+    step 4000/4000, iter_time(ms)=4.3769, images/sec=1827
+results of mobilenet_v2:
+    images/sec: 1814
+    99th_percentile(ms): 4.51
+    total_time(s): 17.5
+    latency_mean(ms): 4.41
+    latency_median(ms): 4.40
+    latency_min(ms): 4.34
+
+
+=========inception_v3 b=1 with xla, 73w
+    step 5000/5000, iter_time(ms)=4.8015, images/sec=208
+results of inception_v3:
+    images/sec: 205
+    99th_percentile(ms): 4.96
+    total_time(s): 24.2
+    latency_mean(ms): 4.87
+    latency_median(ms): 4.86
+    latency_min(ms): 4.79
+
+	
+=========inception_v3 b=4 with xla
+    step 50/50, iter_time(ms)=6.9449, images/sec=575
+results of inception_v3:
+    images/sec: 571
+    99th_percentile(ms): 7.55
+    total_time(s): 0.2
+    latency_mean(ms): 7.01
+    latency_median(ms): 6.94
+    latency_min(ms): 6.89
+	
+=========inception_v3 b=8 with xla, 150/250W 
+    step 5000/5000, iter_time(ms)=9.9239, images/sec=806
+results of inception_v3:
+    images/sec: 803
+    99th_percentile(ms): 10.08
+    total_time(s): 49.6
+    latency_mean(ms): 9.96
+    latency_median(ms): 9.95
+    latency_min(ms): 9.87
+
+====vgg_16 b=1 xla, 150/250
+results of vgg_16:
+    images/sec: 347
+    99th_percentile(ms): 3.15
+    total_time(s): 14.4
+    latency_mean(ms): 2.88
+    latency_median(ms): 2.87
+    latency_min(ms): 2.77
+
+
   ### Output
   ``` 
 2019-12-09 08:57:31.047898: I tensorflow/compiler/tf2tensorrt/segment/segment.cc:460] There are 7 ops of 6 different types in the graph that are not converted to TensorRT: Add, ArgMax, Identity, Const, NoOp, Placeholder, (For more information see https://docs.nvidia.com/deeplearning/dgx/tf-trt-user-guide/index.html#supported-ops).
