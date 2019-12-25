@@ -8,7 +8,7 @@
 
 # eager
 ## TF2.0 with eager ON by default
-- to disable eager in TF2.0:
+- to disable eager in TF2.0/TF1.:
 ```
 from tensorflow.python.framework.ops import disable_eager_execution
 disable_eager_execution()
