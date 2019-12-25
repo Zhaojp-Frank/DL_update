@@ -3,6 +3,26 @@
 - TF_XLA_FLAGS=--tf_xla_auto_jit=2 python ... 
 - or, tf.config.optimizer.set_jit(True)
 - to enable on CPU: TF_XLA_FLAGS="--tf_xla_auto_jit=2 --tf_xla_cpu_global_jit" python ..
+## how to disable XLA?
+- ?
+
+# eager
+## TF2.0 with eager ON by default
+- to disable eager in TF2.0:
+```
+from tensorflow.python.framework.ops import disable_eager_execution
+disable_eager_execution()
+a = tf.constant(100)
+b = tf.constant(200)
+c = a + b
+print(c)
+### shows tf.Tensor(300, shape=(), dtype=int32) if eager ON, else Tensor("add:0", shape=(), dtype=int32)
+```
+- to disable eager in TF1.*
+```
+tf.compat.v1.disable_eager_execution()
+tf.compat.v1.disable_v2_behavior()
+```
 
 ## dump
 - XLA_FLAGS="--dump_hlo_as_text --xla_dump_to=/tmp/tf-xla" TF_XLA_FLAGS="--tf_xla_auto_jit=2" python ... 
