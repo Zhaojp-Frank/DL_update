@@ -1,6 +1,12 @@
 # TF distributed CNN benchmark script
 ## lightwieght CNN networks, 
 - e.g., mobilenet, shufflenet, SSD etc
+- 性能对比: gap
+![alt text ](https://github.com/Zhaojp-Frank/paper/blob/master/mobilenet-scale.png "mobilenet-scale")
+- 功耗对比
+![alt text ](https://github.com/Zhaojp-Frank/paper/blob/master/mobilenet-power.png "mobilenet-power")
+- 综合利用率
+![alt text ](https://github.com/Zhaojp-Frank/paper/blob/master/mobilenet-power-scale.png "mobilenet-power-scale")
 
 ## script to bench CNN
 - TF 1.13(+)
