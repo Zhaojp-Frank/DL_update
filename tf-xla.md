@@ -18,6 +18,7 @@
 | inception3 | 146   | 160   | 109.6% |
 | resnet50   | 235    | 258    | 109.8%|
 | mobilenet   | 2507    | 1124    | 44.8%|
+| nasnet   | 142    | 183    | 128.9%|
 
 ## xla-benchmark (TF 1.14 CNN inference)
 - 推理提高更多 20+%；mobilenet 也可提高 16%. 
@@ -30,7 +31,7 @@
 | inception3 | 512   | 603   | 117.8% |
 | resnet50   | 748    | 948    | 126.7%|
 | mobilenet   | 8403    | 9813    | 116.8%|
-
+| nasnet   | 732    | 962    | 133%|
 
 # eager
 ## TF2.0 with eager ON by default
