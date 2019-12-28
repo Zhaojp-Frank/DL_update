@@ -56,12 +56,13 @@ for model in ${models[@]}; do
   for n in ${gpuN[@]}; do
   for b in ${batchSz[@]}; do
     #LD_PRELOAD=/opt/bench/libxinit.so.1:/opt/bench/libtcmalloc.so.4.5.3 XG=0 shmNow=1 LD_LIBRARY_PATH=/opt/bench/:$LD_LIBRARY_PATH \
-    python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step $replicaPS
-    sleep 5
-    python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replica
-    sleep 5
-    python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replicaFree
-    sleep 5
+    if [ $n -eq 1 ]; then
+      python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step ; sleep 5
+    else
+      python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step $replicaPS; sleep 5
+      python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replica; sleep 5
+      python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replicaFree;sleep 5
+     fi
   done
   done
 done
