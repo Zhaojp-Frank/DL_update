@@ -7,6 +7,7 @@
 
 ## xla-benchmark (TF 1.14 CNN training)
 - 多数提高性能10%；但是对于mobilenet 性能剧烈下降，只有原来的44%
+
 | train   |xla-off | xla-on | % |
 | ------- | ------ | ------ | ------ |
 | alexnet | 2111   | 2340   | 110.8% |
@@ -17,6 +18,7 @@
 
 ## xla-benchmark (TF 1.14 CNN inference)
 - 推理提高更多 20+%；mobilenet 也可提高 16%. 表明XLA优化较好的主要在前向计算；后向有问题 或者往往起副作用
+
 | inference   |xla-off | xla-on | % |
 | ------- | ------ | ------ | ------ |
 | alexnet | 6677   | 7320   | 109.6% |
