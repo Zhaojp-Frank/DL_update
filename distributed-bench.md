@@ -48,20 +48,19 @@ splitGrad="--gradient_repacking 2"
 relaxSyncVar="--variable_consistency relaxed"
 cacheData="--datasets_repeat_cached_sample True"
 
-libP='LD_PRELOAD=/usr/local/lib/libtcmalloc.so '
 #nvp='nvprof --analysis-metrics --concurrent-kernels on --continuous-sampling-interval 1 --dependency-analysis --devices 0 --kernel-latency-timestamps on --profile-all-processes -o %p.nvvp '
 #nvp='nvprof --replay-mode kernel --metrics flop_sp_efficiency --skip-kernel-replay-save-restore on --profile-api-trace all --analysis-metrics --concurrent-kernels on --continuous-sampling-interval 2 --dependency-analysis --devices 0 --kernel-latency-timestamps off --profile-child-processes -o %p.nvvp '
 
 for model in ${models[@]}; do
   for n in ${gpuN[@]}; do
   for b in ${batchSz[@]}; do
-    #LD_PRELOAD=/opt/bench/libxinit.so.1:/opt/bench/libtcmalloc.so.4.5.3 XG=0 shmNow=1 LD_LIBRARY_PATH=/opt/bench/:$LD_LIBRARY_PATH \
+    #LD_PRELOAD=/opt/bench/libxinit.so.1 XG=0 shmNow=1 LD_LIBRARY_PATH=/opt/bench/:$LD_LIBRARY_PATH \
     if [ $n -eq 1 ]; then
       python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step ; sleep 5
     else
       python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step $replicaPS; sleep 5
-      python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replica; sleep 5
-      python ./tf_cnn_benchmarks.py --num_gpus $n $gpuN $dataset --model $model --batch_size $b $step $replicaFree;sleep 5
+      python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step $replica; sleep 5
+      python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step $replicaFree;sleep 5
      fi
   done
   done
