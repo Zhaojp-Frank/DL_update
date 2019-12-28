@@ -1,4 +1,7 @@
 # TF distributed CNN benchmark script
+## lightwieght CNN networks, 
+- e.g., mobilenet, shufflenet, SSD etc
+
 ## script to bench CNN
 - TF 1.13(+)
 ```
