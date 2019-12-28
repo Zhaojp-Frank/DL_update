@@ -1,4 +1,7 @@
 # TF-xla
+- 编译动态优化 主要在前向计算部分（BP实测有副作用）；多数提高10%（训练）~20+%（推理），但部分模型的训练性能下降严重，表明还不太普适
+- 欠缺：没有考虑动态运行时 例如sharing/communication等开销
+
 ## how to enable
 - TF_XLA_FLAGS=--tf_xla_auto_jit=2 python ... 
 - or, tf.config.optimizer.set_jit(True)
@@ -17,7 +20,8 @@
 | mobilenet   | 2507    | 1124    | 44.8%|
 
 ## xla-benchmark (TF 1.14 CNN inference)
-- 推理提高更多 20+%；mobilenet 也可提高 16%. 表明XLA优化较好的主要在前向计算；后向有问题 或者往往起副作用
+- 推理提高更多 20+%；mobilenet 也可提高 16%. 
+- 表明XLA优化较好的主要在前向计算；后向有问题 或者往往起副作用
 
 | inference   |xla-off | xla-on | % |
 | ------- | ------ | ------ | ------ |
