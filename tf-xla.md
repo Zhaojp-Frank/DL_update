@@ -3,8 +3,28 @@
 - TF_XLA_FLAGS=--tf_xla_auto_jit=2 python ... 
 - or, tf.config.optimizer.set_jit(True)
 - to enable on CPU: TF_XLA_FLAGS="--tf_xla_auto_jit=2 --tf_xla_cpu_global_jit" python ..
-## how to disable XLA?
-- ?
+- opt to disable xla in TF2.0?
+
+## xla-benchmark (TF 1.14 CNN training)
+- 多数提高性能10%；但是对于mobilenet 性能剧烈下降，只有原来的44%
+| train   |xla-off | xla-on | % |
+| ------- | ------ | ------ | ------ |
+| alexnet | 2111   | 2340   | 110.8% |
+| vgg16   | 151    | 168    | 111.3% |
+| inception3 | 146   | 160   | 109.6% |
+| resnet50   | 235    | 258    | 109.8%|
+| mobilenet   | 2507    | 1124    | 44.8%|
+
+## xla-benchmark (TF 1.14 CNN inference)
+- 推理提高更多 20+%；mobilenet 也可提高 16%. 表明XLA优化较好的主要在前向计算；后向有问题 或者往往起副作用
+| inference   |xla-off | xla-on | % |
+| ------- | ------ | ------ | ------ |
+| alexnet | 6677   | 7320   | 109.6% |
+| vgg16   | 474    | 590    | 124.5% |
+| inception3 | 512   | 603   | 117.8% |
+| resnet50   | 748    | 948    | 126.7%|
+| mobilenet   | 8403    | 9813    | 116.8%|
+
 
 # eager
 ## TF2.0 with eager ON by default
