@@ -2,7 +2,7 @@
 ## TF profiler
 - 支持cpu/gpu, 类型包括floats, mem, param bytes, run time; 可通过工具有多种view(graph-timeline, scope/node, code, op), 以及timeline 输出到chrome浏览器可视化；可给出建议  
 -- 筛选项: [name | depth|bytes|peak_bytes|residual_bytes|output_bytes|micros|accelerator_micros|cpu_micros|params|float_ops|occurrence]
-
+-- advice 基于rule-plugin checker 检查format, 排序等
 - **不足**：离线分析；不支持并发多job；不支持分析传输-同步；需要改代码;profiler命令行默认不会build，自己build很麻烦。只适用于TF，不通用；且依赖一些op的实现以及用户的交互（例如有些op需要用户输入shape）  
 -- e.g : https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/profile_memory.md
 ```
@@ -79,6 +79,18 @@ tfprof> op -select micros,device -order_by micros
 #Usually scope view allows you to pin point the problematic places if you have properly named your operations with tf.name_scope or tf.variable_scope.
 tfprof> scope -max_depth 30 -select micros -min_micros 100000 -order_by micros
 node name | execution time
+
+# You can also visualize the memory information through other methods.
+# With op view, it shows you the aggregated output tensor bytes of each
+# operation type.
+tfprof> op -select bytes -order_by bytes
+
+# With scope view, you can see the operations that outputs largest tensors.
+tfprof> scope -order_by bytes -select bytes -min_bytes 100000000
+
+# code view.
+tfprof> code  -max_depth 10 -select bytes -order_by bytes -start_name_regexes .*seq2seq.* -min_bytes 1
+node name | requested bytes
 
 # 与代码对齐
 tfprof> code -max_depth 1000 -show_name_regexes .*model_analyzer.*py.* -select micros -account_type_regexes .* -order_by micros
@@ -193,7 +205,9 @@ if __name__ == '__main__':
 2. https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/profile_model_architecture.md  
 3. https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/profile_time.md  
 4. https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/python_api.md  
+- https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/advise.md 
 2. https://jiayiliu.github.io/posts/tensoflow-profiling/  
 3. https://www.tensorflow.org/tensorboard/tensorboard_profiling_keras  
 4. https://gist.github.com/notoraptor/4cfeaaf2ab24ebce59ac727f389096fa  
 5. https://stackoverflow.com/questions/54360762/how-to-profile-tensorflow-model-that-running-on-tf-serving  
+- https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/profile_memory.md 
