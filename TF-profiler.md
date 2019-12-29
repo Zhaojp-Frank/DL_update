@@ -1,7 +1,7 @@
 # Profiling
 ## TF profiler
 - 支持cpu/gpu, 类型包括floats, mem, param bytes, run time; 可通过工具tfprof> graph产生timeline 输出到chrome浏览器可视化；可给出建议
-- **不足**：离线分析；不支持并发多job；需要改代码;profiler命令行默认不会build，自己build很麻烦
+- **不足**：离线分析；不支持并发多job；不支持分析传输-同步；需要改代码;profiler命令行默认不会build，自己build很麻烦。只适用于TF，不通用
 -- 筛选项: [name | depth|bytes|peak_bytes|residual_bytes|output_bytes|micros|accelerator_micros|cpu_micros|params|float_ops|occurrence]
 - Ref  
 1. https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/profiler/g3doc/options.md  
