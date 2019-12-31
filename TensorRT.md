@@ -3,6 +3,9 @@
 
 # samples
 
+# perf
+![alt text](https://im0-tub-com.yandex.net/i?id=841ba9d9b7007fbd51d6fc462d2ee241&n=13 "bench")
+
 # Ref
 - https://docs.nvidia.com/deeplearning/frameworks/tf-trt-user-guide/index.html 
 - https://github.com/NVIDIA/TensorRT  
