@@ -33,36 +33,36 @@ replicaPS="--variable_update parameter_server"
 replicaFree="--variable_update independent"
 psCPU='--local_parameter_device=cpu'
 
-xla="--xla True --xla_compile True"
+xla="--xla=True --xla_compile=True"
 
-FP16='--use_fp16=True'
+FP16='--use_fp16=True --fp16_vars=True'
 inf='--forward_only=True'
-freezeGraph="--freeze_when_forward_only True"
-trt="--trt_mode FP16"
+freezeGraph="--freeze_when_forward_only=True"
+trt="--trt_mode=FP16"
 
-useUMA="--use_unified_memory True"
-gmempct="--gpu_memory_frac_for_testing 100"
+useUMA="--use_unified_memory=True"
+gmempct="--gpu_memory_frac_for_testing=0.45"
 
 graphLog="--graph_file ./graph-1.txt"
 tfprofLog="--tfprof_file ./tfprof-1.log"
 maxOpTrack="--gpu_kt_max_interval -"
-trainAcc="--print_training_accuracy True"
+trainAcc="--print_training_accuracy=True"
 
-mlPerf="--ml_perf True"
-useDataset="--use_datasets True"
-winogradOpt="--winograd_nonfused True"
-batchnormPersistent="--batchnorm_persistent True"
-compactGrad="--compact_gradient_transfer True"
-splitGrad="--gradient_repacking 2"
-relaxSyncVar="--variable_consistency relaxed"
-cacheData="--datasets_repeat_cached_sample True"
+mlPerf="--ml_perf=True"
+useDataset="--use_datasets=True"
+winogradOpt="--winograd_nonfused=True"
+batchnormPersistent="--batchnorm_persistent=True"
+compactGrad="--compact_gradient_transfer=True"
+splitGrad="--gradient_repacking=2"
+relaxSyncVar="--variable_consistency=relaxed"
+cacheData="--datasets_repeat_cached_sample=True"
 
 #nvp='nvprof --analysis-metrics --concurrent-kernels on --continuous-sampling-interval 1 --dependency-analysis --devices 0 --kernel-latency-timestamps on --profile-all-processes -o %p.nvvp '
 #nvp='nvprof --replay-mode kernel --metrics flop_sp_efficiency --skip-kernel-replay-save-restore on --profile-api-trace all --analysis-metrics --concurrent-kernels on --continuous-sampling-interval 2 --dependency-analysis --devices 0 --kernel-latency-timestamps off --profile-child-processes -o %p.nvvp '
 
 for model in ${models[@]}; do
-  for n in ${gpuN[@]}; do
   for b in ${batchSz[@]}; do
+  for n in ${gpuN[@]}; do
     #LD_PRELOAD=/opt/bench/libxinit.so.1 XG=0 shmNow=1 LD_LIBRARY_PATH=/opt/bench/:$LD_LIBRARY_PATH \
     if [ $n -eq 1 ]; then
       python ./tf_cnn_benchmarks.py --num_gpus $n $dataset --model $model --batch_size $b $step ; sleep 5
