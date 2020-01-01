@@ -19,5 +19,9 @@ The trade-off is then between the **ease of use** and the **performance** gain (
 - https://github.com/tensorflow/models/issues/4028 
 - https://developer.nvidia.com/deep-learning-performance-training-inference#deeplearningperformance_inference  
 - https://developer.download.nvidia.cn/video/gputechconf/gtc/2019/presentation/s9431-tensorrt-inference-with-tensorflow.pdf 
-- https://medium.com/tensorflow/high-performance-inference-with-tensorrt-integration-c4d78795fbfe 
+- https://medium.com/tensorflow/high-performance-inference-with-tensorrt-integration-c4d78795fbfe  
+- https://arleyzhang.github.io/articles/7f4b25ce/ 
+- https://github.com/AastaNV/TRT_object_detection 
+- https://github.com/Zhaojp-Frank/tensorrt-laboratory 
+- https://arleyzhang.github.io/articles/7f4b25ce/ 
 
