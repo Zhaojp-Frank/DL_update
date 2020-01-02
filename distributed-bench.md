@@ -86,4 +86,12 @@ for (( i=0; i<14400; i++ ));do
         sleep 1
 done
 ```
+## using Horovod
+```
+$ horovodrun -np 16 -H server1:4,server2:4,server3:4,server4:4 \
+    python scripts/tf_cnn_benchmarks/tf_cnn_benchmarks.py \
+        --model resnet101 \
+        --batch_size 64 \
+        --variable_update horovod
+```
 
