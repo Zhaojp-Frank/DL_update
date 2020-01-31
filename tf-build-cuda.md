@@ -1,4 +1,4 @@
-# F 
+# TF build out
 guide, industry practices, tips
 ```
 root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# find . -type f|xargs grep cudaGet
@@ -215,3 +215,102 @@ Binary file ./contrib/nearest_neighbor/python/ops/_nearest_neighbor_ops.so match
 Binary file ./contrib/ffmpeg/ffmpeg.so matches
 
 ```
+
+## some cases
+from tf2xla/ops/_xla_ops.so
+```
+/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# nm -s ./compiler/tf2xla/ops/_xla_ops.so|grep cudaGet
+00000000001ca5b0 t _GLOBAL__I___cudaGetExportTableInternal
+0000000000244784 r _ZZ13cudaGetDeviceE12__FUNCTION__
+0000000000244860 r _ZZ16cudaGetErrorNameE12__FUNCTION__
+00000000002448a0 r _ZZ16cudaGetLastErrorE12__FUNCTION__
+0000000000243c10 r _ZZ17cudaGetSymbolSizeE12__FUNCTION__
+00000000002437f0 r _ZZ18cudaGetChannelDescE12__FUNCTION__
+0000000000244820 r _ZZ18cudaGetDeviceCountE12__FUNCTION__
+0000000000244730 r _ZZ18cudaGetDeviceFlagsE12__FUNCTION__
+0000000000244840 r _ZZ18cudaGetErrorStringE12__FUNCTION__
+0000000000243c30 r _ZZ20cudaGetSymbolAddressE12__FUNCTION__
+0000000000244800 r _ZZ23cudaGetDevicePropertiesE12__FUNCTION__
+0000000000243810 r _ZZ23cudaGetSurfaceReferenceE12__FUNCTION__
+0000000000243850 r _ZZ23cudaGetTextureReferenceE12__FUNCTION__
+0000000000243f60 r _ZZ26cudaGetMipmappedArrayLevelE12__FUNCTION__
+0000000000243870 r _ZZ29cudaGetTextureAlignmentOffsetE12__FUNCTION__
+0000000000243740 r _ZZ31cudaGetTextureObjectTextureDescE12__FUNCTION__
+0000000000243680 r _ZZ32cudaGetSurfaceObjectResourceDescE12__FUNCTION__
+0000000000243760 r _ZZ32cudaGetTextureObjectResourceDescE12__FUNCTION__
+0000000000243700 r _ZZ36cudaGetTextureObjectResourceViewDescE12__FUNCTION__
+00000000001ca5c0 t __cudaGetExportTableInternal
+00000000001d2010 t cudaGetChannelDesc
+00000000001dcc70 t cudaGetDevice
+00000000001dd700 t cudaGetDeviceCount
+00000000001dc780 t cudaGetDeviceFlags
+
+
+./python/_pywrap_tensorflow_internal.so
+nm -s ./python/_pywrap_tensorflow_internal.so|grep cudaGet
+0000000006ce02e0 t _GLOBAL__I___cudaGetExportTableInternal
+0000000008a49b64 r _ZZ13cudaGetDeviceE12__FUNCTION__
+0000000008a49c40 r _ZZ16cudaGetErrorNameE12__FUNCTION__
+0000000008a49c80 r _ZZ16cudaGetLastErrorE12__FUNCTION__
+0000000008a48ff0 r _ZZ17cudaGetSymbolSizeE12__FUNCTION__
+0000000008a48bd0 r _ZZ18cudaGetChannelDescE12__FUNCTION__
+0000000008a49c00 r _ZZ18cudaGetDeviceCountE12__FUNCTION__
+0000000008a49b10 r _ZZ18cudaGetDeviceFlagsE12__FUNCTION__
+0000000008a49c20 r _ZZ18cudaGetErrorStringE12__FUNCTION__
+0000000008a49010 r _ZZ20cudaGetSymbolAddressE12__FUNCTION__
+0000000008a49be0 r _ZZ23cudaGetDevicePropertiesE12__FUNCTION__
+0000000008a48bf0 r _ZZ23cudaGetSurfaceReferenceE12__FUNCTION__
+0000000008a48c30 r _ZZ23cudaGetTextureReferenceE12__FUNCTION__
+0000000008a49340 r _ZZ26cudaGetMipmappedArrayLevelE12__FUNCTION__
+0000000008a48c50 r _ZZ29cudaGetTextureAlignmentOffsetE12__FUNCTION__
+0000000008a48b20 r _ZZ31cudaGetTextureObjectTextureDescE12__FUNCTION__
+0000000008a48a60 r _ZZ32cudaGetSurfaceObjectResourceDescE12__FUNCTION__
+0000000008a48b40 r _ZZ32cudaGetTextureObjectResourceDescE12__FUNCTION__
+0000000008a48ae0 r _ZZ36cudaGetTextureObjectResourceViewDescE12__FUNCTION__
+0000000006ce02f0 t __cudaGetExportTableInternal
+0000000006ce7d40 t cudaGetChannelDesc
+0000000006cf29a0 t cudaGetDevice
+
+```
+
+## how to
+tf2xla add "libcudart_static" but actualy useless ?
+```
+# grep "libcudart_static" compiler/tf2xla/ops/_xla_ops.so-2.params 
+bazel-out/k8-opt/bin/external/local_config_cuda/cuda/cuda/lib/libcudart_static.a
+
+# grep 'cuda' *
+grep: _objs: Is a directory
+Binary file _xla_ops.so matches
+_xla_ops.so-2.params:bazel-out/k8-opt/bin/external/local_config_cuda/cuda/cuda/lib/libcudart_static.a
+
+/opt/tf-src/tensorflow-1.15.2/tensorflow/compiler/tf2xla$ find . -type f |xargs grep -Hi cuda
+./BUILD:load("//tensorflow:tensorflow.bzl", "tf_cc_binary", "tf_cc_test", "tf_cuda_cc_test")
+./BUILD:    "//tensorflow/core/platform:default/cuda_build_defs.bzl",
+./BUILD:    "if_cuda_is_configured",
+./BUILD:    ] + if_cuda_is_configured([
+./BUILD:        "//tensorflow/core:stream_executor_no_cuda",
+./BUILD:tf_cuda_cc_test(
+./BUILD:tf_cuda_cc_test(
+./xla_op_registry.cc:#include "tensorflow/core/platform/stream_executor_no_cuda.h"
+
+
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# ll compiler/tf2xla/ops/
+total 3316
+drwxr-xr-x 3 root root    4096 Jan 30 16:16 ./
+drwxr-xr-x 3 root root    4096 Jan 30 15:02 ../
+drwxr-xr-x 3 root root    4096 Jan 30 15:02 _objs/
+-r-xr-xr-x 1 root root 3259600 Jan 30 16:16 _xla_ops.so*
+-r-xr-xr-x 1 root root    4372 Jan 30 15:02 _xla_ops.so-2.params*
+-r-xr-xr-x 1 root root  110860 Jan 30 16:10 gen_xla_ops.py*
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# nm -s compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.|grep cudaGet
+xla_ops.pic.d  xla_ops.pic.o  
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# nm -s compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.o|grep cudaGet
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# ll compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.o|grep cudaGet
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# grep cudaGet compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.o
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# ll compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.o
+-r-xr-xr-x 1 root root 108992 Jan 30 15:02 compiler/tf2xla/ops/_objs/_xla_ops.so/xla_ops.pic.o*
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# ll compiler/tf2xla/ops/_xla_ops.so
+-r-xr-xr-x 1 root root 3259600 Jan 30 16:16 compiler/tf2xla/ops/_xla_ops.so*
+
+
