@@ -2,6 +2,34 @@
 - no static cudart in nv build images l.14/13 
 - no static cudart in nv build images l.12, but use static since 1.13.1, due to tf2xla
 ```
+$ sudo docker images|grep 1.12
+daocloud.io/daocloud/tensorflow        1.12.0-devel-gpu-py3               d6c139d2fdbf        15 months ago       3.77GB
+tensorflow/tensorflow                  1.12.0-devel-gpu                   0c27be65b63d        15 months ago       3.71GB
+zhaojp@zhaojp-linux:/opt/tf-src/tensorflow-1.12.0/build$ sudo nvidia-docker run -it --name tf-1.12 --net=host -v /opt/:/github tensorflow/tensorflow:1.12.0-devel-gpu bash
+root@zhaojp-linux:~# nm -s /usr/local/lib/python2.7/dist-packages/tensorflow/python/_pywrap_tensorflow_internal.so |grep cudaGet
+                 U cudaGetDevice@@libcudart.so.9.0
+                 U cudaGetDeviceProperties@@libcudart.so.9.0
+                 U cudaGetErrorString@@libcudart.so.9.0
+                 U cudaGetLastError@@libcudart.so.9.0
+
+$ sudo nvidia-docker run -it --name tf-1.12 --net=host -v /opt/:/github tensorflow/tensorflow:1.12.0-devel-gpu-py3 bash
+root@zhaojp-linux:~# n - /usr/local/lib/python3.5/dist-packages/tensorflow/python/_pywrap_tensorflow_internal.so |grep cudaGet
+bash: n: command not found
+root@zhaojp-linux:~# nm -s /usr/local/lib/python3.5/dist-packages/tensorflow/python/_pywrap_tensorflow_internal.so |grep cudaGet
+                 U cudaGetDevice@@libcudart.so.9.0
+                 U cudaGetDeviceProperties@@libcudart.so.9.0
+                 U cudaGetErrorString@@libcudart.so.9.0
+                 U cudaGetLastError@@libcudart.so.9.0
+$ sudo nvidia-docker run -it --name tf-1.13 --net=host -v /opt/:/github tensorflow/tensorflow:1.13.1-gpu-py3 bash
+# nm -s /usr/local/lib/python3.5/dist-packages/tensorflow/python/_pywrap_tensorflow_internal.so |grep cudaGet
+000000000486f940 t _GLOBAL__I___cudaGetExportTableInternal
+0000000009749884 r _ZZ13cudaGetDeviceE12__FUNCTION__
+0000000009749960 r _ZZ16cudaGetErrorNameE12__FUNCTION__
+00000000097499a0 r _ZZ16cudaGetLastErrorE12__FUNCTION__
+```
+
+##  tf 1.15
+```
 root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# find . -type f|xargs grep cudaGet
 Binary file ./libtensorflow_framework.so.1.15.2 matches
 Binary file ./stream_executor/cuda/libcudart_stub.pic.a matches
