@@ -1,5 +1,6 @@
 # TF build out
-guide, industry practices, tips
+- no static cudart in nv build images l.14/13 
+- no static cudart in nv build images l.12, but use static since 1.13.1, due to tf2xla
 ```
 root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# find . -type f|xargs grep cudaGet
 Binary file ./libtensorflow_framework.so.1.15.2 matches
@@ -219,6 +220,43 @@ Binary file ./contrib/ffmpeg/ffmpeg.so matches
 ## some cases
 from tf2xla/ops/_xla_ops.so
 ```
+#tf.1.15.2 build myself
+root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# find . -type f -name "*.lo"|xargs grep _ZZ13cudaGetDeviceE12__FUNCTION_
+_root@zhaojp-linux:/github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# find . -type f -name "*.o"|xargs grep _ZZ13cudaGetDeviceE12__FUNCTION__
+
+
+# find . -type f -name "*.so*"|xargs grep _ZZ13cudaGetDeviceE12__FUNCTION__
+Binary file ./python/_pywrap_tensorflow_internal.so matches
+Binary file ./lite/experimental/microfrontend/python/ops/_audio_microfrontend_op.so matches
+Binary file ./compiler/tf2xla/ops/_xla_ops.so matches <<====
+
+Binary file ./contrib/hadoop/_dataset_ops.so matches
+Binary file ./contrib/tensor_forest/python/ops/_model_ops.so matches
+Binary file ./contrib/tensor_forest/python/ops/_stats_ops.so matches
+Binary file ./contrib/tensor_forest/python/ops/_tensor_forest_ops.so matches
+Binary file ./contrib/kinesis/_dataset_ops.so matches
+Binary file ./contrib/reduce_slice_ops/python/ops/_reduce_slice_ops.so matches
+Binary file ./contrib/kafka/_dataset_ops.so matches
+Binary file ./contrib/boosted_trees/python/ops/_boosted_trees_ops.so matches
+Binary file ./contrib/libsvm/python/ops/_libsvm_ops.so matches
+Binary file ./contrib/bigtable/python/ops/_bigtable.so matches
+Binary file ./contrib/resampler/python/ops/_resampler_ops.so matches
+Binary file ./contrib/image/python/ops/_image_ops.so matches
+Binary file ./contrib/image/python/ops/_single_image_random_dot_stereograms.so matches
+Binary file ./contrib/image/python/ops/_distort_image_ops.so matches
+Binary file ./contrib/memory_stats/python/ops/_memory_stats_ops.so matches
+Binary file ./contrib/seq2seq/python/ops/_beam_search_ops.so matches
+Binary file ./contrib/input_pipeline/python/ops/_input_pipeline_ops.so matches
+Binary file ./contrib/periodic_resample/python/ops/_periodic_resample_op.so matches
+Binary file ./contrib/ignite/_ignite_ops.so matches
+Binary file ./contrib/framework/python/ops/_variable_ops.so matches
+Binary file ./contrib/layers/python/ops/_sparse_feature_cross_op.so matches
+Binary file ./contrib/text/python/ops/_skip_gram_ops.so matches
+Binary file ./contrib/factorization/python/ops/_factorization_ops.so matches
+Binary file ./contrib/fused_conv/python/ops/_fused_conv2d_bias_activation_op.so matches
+Binary file ./contrib/nearest_neighbor/python/ops/_nearest_neighbor_ops.so matches
+Binary file ./contrib/ffmpeg/ffmpeg.so matches
+
 /github/tf-src/tensorflow-1.15.2/bazel-bin/tensorflow# nm -s ./compiler/tf2xla/ops/_xla_ops.so|grep cudaGet
 00000000001ca5b0 t _GLOBAL__I___cudaGetExportTableInternal
 0000000000244784 r _ZZ13cudaGetDeviceE12__FUNCTION__
