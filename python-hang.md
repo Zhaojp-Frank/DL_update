@@ -30,3 +30,20 @@ if __name__ == '__main__':
 
 ## Signal to get process stack
 - sudo kill -SIGUSR1 <PID>
+```
+    ThreadPoolExecutor-0_7 tid=140147785979648
+    at self.__bootstrap_inner()(threading.py:774)
+    at self.run()(threading.py:801)
+    at self.__target(*self.__args, **self.__kwargs)(threading.py:754)
+    at work_item = work_queue.get(block=True)(thread.py:73)
+    at self.not_empty.wait()(Queue.py:168)
+    at waiter.acquire()(threading.py:340)
+
+ThreadPoolExecutor-0_6 tid=140147794372352
+    at self.__bootstrap_inner()(threading.py:774)
+    at self.run()(threading.py:801)
+    at self.__target(*self.__args, **self.__kwargs)(threading.py:754)
+    at work_item = work_queue.get(block=True)(thread.py:73)
+    at self.not_empty.wait()(Queue.py:168)
+    at waiter.acquire()(threading.py:340)
+```
