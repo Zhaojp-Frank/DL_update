@@ -29,7 +29,7 @@ if __name__ == '__main__':
 ## Run your python 
 
 ## Signal to get process stack
-- sudo kill -SIGUSR1 <PID>
+- sudo kill -SIGUSR1 PID
 ```
     ThreadPoolExecutor-0_7 tid=140147785979648
     at self.__bootstrap_inner()(threading.py:774)
