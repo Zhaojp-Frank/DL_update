@@ -1,0 +1,36 @@
+# python-coredump
+
+# prepare
+- gdb, python-dbg
+-- wget http://ftp.riken.jp/Linux/cern/centos/7.1/sclo/Sources/rh/devtoolset-7/devtoolset-7-gdb-8.0-17.el7.src.rpm
+-- wget https://buildlogs.centos.org/centos/7/sclo/x86_64/rh/devtoolset-7/devtoolset-7-gdb-8.0-17.el7.x86_64.rpm
+
+# config
+- unlimit -c unlimit
+- echo "core.%e.%p.%h.%t" >/proc/sys/kernel/core_pattern
+- 如果报no module gdb
+-- mkdir -p /usr/local/share/gdb 
+-- cp -rf /src/gdb-8.0/gdb/python/lib/gdb/* /usr/local/share/gdb 
+
+# example
+gdb --data-direct=/usr/local/share/gdb /usr/bin/python2.7 /home/admin/logs/core.python.38029.j38b11264.eu95sqa.1581330502
+```
+#0  0x00007f3c77f79b52 in cuEventRecord (hEvent=0x2bef4530, hStream=0x2beafa50) at cuda10.c:809
+809     cuda10.c: No such file or directory.
+[Current thread is 1 (Thread 0x7f39df7fe700 (LWP 38382))]
+(gdb) bt
+#0  0x00007f3c77f79b52 in cuEventRecord (hEvent=0x2bef4530, hStream=0x2beafa50) at cuda10.c:809
+#1  0x00007f3c9a6fd98f in stream_executor::cuda::CUDADriver::RecordEvent(stream_executor::cuda::CudaContext*, CUevent_st*, CUstream_st*) ()
+   from /usr/local/lib/python2.7/dist-packages/tensorflow/python/../libtensorflow_framework.so
+#2  0x00007f3c9a713a7d in stream_executor::cuda::CUDAExecutor::CreateStreamDependency(stream_executor::Stream*, stream_executor::Stream*) ()
+   from /usr/local/lib/python2.7/dist-packages/tensorflow/python/../libtensorflow_framework.so
+#3  0x00007f3c9a6308ae in stream_executor::Stream::ThenWaitFor(stream_executor::Stream*) ()
+   from /usr/local/lib/python2.7/dist-packages/tensorflow/python/../libtensorflow_framework.so
+#4  0x00007f3c9a1d1cf3 in tensorflow::GPUUtil::CopyCPUTensorToGPU(tensorflow::Tensor const*, tensorflow::DeviceContext const*, tensorflow::Device*, tensorflow::Tensor*, std::function<void (tensorflow::Status const&)>) ()
+
+(gdb) info local
+index = -545265920
+i = 0
+hit = 0
+__FUNCTION__ = "cuEventRecord"
+```
